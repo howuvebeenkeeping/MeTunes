@@ -1,6 +1,6 @@
 import { radioPlayerInit } from './radioPlayer.js';
 import { audioPlayerInit } from './audioPlayer.js';
-import { videoPlayerInit } from './videoPlayer.js';
+import videoPlayerInit from './videoPlayer.js';    // можно экспортировать через default
 
 const playerBtn = document.querySelectorAll('.player-btn');
 const playerBlock = document.querySelectorAll('.player-block');
