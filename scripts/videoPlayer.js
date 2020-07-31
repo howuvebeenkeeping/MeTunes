@@ -1,6 +1,6 @@
 import { addZero } from './supportScript.js';
 
-const videoPlayer = () => {
+export const videoPlayerInit = () => {
     const videoPlayer = document.querySelector('.video-player');
     const videoButtonPlay = document.querySelector('.video-button__play');
     const videoButtonStop = document.querySelector('.video-button__stop');
@@ -73,6 +73,8 @@ const videoPlayer = () => {
     videoPlayer.volume = .5;
 
     videoVolume.value = videoPlayer.volume * 100;
-}
 
-export default videoPlayer;
+    videoPlayerInit.stop = () => {
+        if (!videoPlayer.paused) stopPlay();
+    };
+}

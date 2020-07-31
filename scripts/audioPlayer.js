@@ -26,6 +26,8 @@ export const audioPlayerInit = () => {
 
         if (wasPaused) audioPlayer.pause();
         else audioPlayer.play();
+
+        setTimeout(updateTime, 500);
     };
 
     const switchToNextTrack = () => {
@@ -35,9 +37,24 @@ export const audioPlayerInit = () => {
     };
 
     const switchToPrevTrack = () => {
-        if (trackIndex !== 0) trackIndex--;
+        if (trackIndex) trackIndex--;
         else trackIndex = playlist.length - 1;
         loadTrack();
+    };
+
+    const updateTime = () => {
+        const duration = audioPlayer.duration;
+        const currentTime = audioPlayer.currentTime;
+        const progress = (currentTime / duration) * 100;
+        const minutesPassed = Math.floor(currentTime / 60) || '0';
+        const secondsPassed = Math.floor(currentTime % 60) || '0';
+        const minutesTotal = Math.floor(duration / 60) || '0';
+        const secondsTotal = Math.floor(duration % 60) || '0';
+
+        audioProgressTiming.style.width = progress + '%';
+
+        audioTimePassed.textContent = `${addZero(minutesPassed)}:${addZero(secondsPassed)}`;
+        audioTimeTotal.textContent = `${addZero(minutesTotal)}:${addZero(secondsTotal)}`;
     };
 
     audioNavigation.addEventListener('click', event => {
@@ -69,20 +86,7 @@ export const audioPlayerInit = () => {
         audioPlayer.play();
     });
 
-    audioPlayer.addEventListener('timeupdate', () => {
-        const duration = audioPlayer.duration;
-        const currentTime = audioPlayer.currentTime;
-        const progress = (currentTime / duration) * 100;
-        const minutesPassed = Math.floor(currentTime / 60) || '0';
-        const secondsPassed = Math.floor(currentTime % 60) || '0';
-        const minutesTotal = Math.floor(duration / 60) || '0';
-        const secondsTotal = Math.floor(duration % 60) || '0';
-
-        audioProgressTiming.style.width = progress + '%';
-
-        audioTimePassed.textContent = `${addZero(minutesPassed)}:${addZero(secondsPassed)}`;
-        audioTimeTotal.textContent = `${addZero(minutesTotal)}:${addZero(secondsTotal)}`;
-    });
+    audioPlayer.addEventListener('timeupdate', updateTime);
 
     audioProgress.addEventListener('click', e => {
         const currentPosition = e.offsetX;
@@ -90,4 +94,13 @@ export const audioPlayerInit = () => {
         const progress = (currentPosition / trackbarWidth) * audioPlayer.duration;
         audioPlayer.currentTime = progress;
     });
+
+    audioPlayerInit.stop = () => {
+        if (!audioPlayer.paused) {
+            audioPlayer.pause();
+            audio.classList.remove('play');
+            audioButtonPlay.classList.remove('fa-pause');
+            audioButtonPlay.classList.add('fa-play');
+        }
+    };
 }

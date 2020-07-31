@@ -69,4 +69,9 @@ export const radioPlayerInit = () => {
         } else 
             audio.volume = prevVolume;
     });
+
+    radioPlayerInit.stop = () => {
+        toggleIconPlay();
+        audio.pause();
+    };
 }
